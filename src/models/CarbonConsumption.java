@@ -10,7 +10,7 @@ public class CarbonConsumption {
     private LocalDate endDate;
     private static final AtomicInteger idCounter = new AtomicInteger();
 
-    public static int generateUniqueID() {
+    private static int generateUniqueID() {
         return idCounter.incrementAndGet();
     }
 
@@ -20,8 +20,8 @@ public class CarbonConsumption {
         this.startDate = startDate;
         this.endDate = endDate;
     }
-    // Getters
 
+    // Getters
     public int getId() {
         return id;
     }
@@ -39,7 +39,6 @@ public class CarbonConsumption {
     }
 
     // Setters
-
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
@@ -50,13 +49,5 @@ public class CarbonConsumption {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
-    }
-
-    @Override
-    public String toString() {
-        return "ID: " + id + "\t" +
-                "Quantity: " + quantity + " kg\t" +
-                "Start Date: " + startDate + "\t" +
-                "End Date: " + endDate + '\n';
     }
 }

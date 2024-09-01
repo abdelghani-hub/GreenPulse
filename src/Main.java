@@ -1,16 +1,11 @@
-import models.CarbonConsumption;
 import models.User;
+import services.CarbonConsumptionService;
 import services.UserService;
 import utils.ConsoleUI;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.util.Scanner;
 
 public class Main {
     private static final UserService userService = new UserService();
-    private static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
 
@@ -20,7 +15,7 @@ public class Main {
 
         while (running) {
             ConsoleUI.displayMenu();
-            String choice = scanner.nextLine();
+            String choice = ConsoleUI.scanner.nextLine();
 
             switch (choice) {
                 case "1":
@@ -42,6 +37,9 @@ public class Main {
                     addCarbonConsumption();
                     break;
                 case "7":
+                    generateCarbonReport();
+                    break;
+                case "8":
                     running = false;
                     System.out.println("Exiting the application...");
                     break;
@@ -53,13 +51,13 @@ public class Main {
 
     private static void createUser() {
         System.out.print("\nEnter name : ");
-        String name = scanner.nextLine();
+        String name = ConsoleUI.scanner.nextLine();
         System.out.print("Enter age  : ");
-        int age = scanner.nextInt();
-        scanner.nextLine();
+        int age = ConsoleUI.scanner.nextInt();
+        ConsoleUI.scanner.nextLine();
         System.out.print("Enter id   : ");
-        int id = scanner.nextInt();
-        scanner.nextLine();
+        int id = ConsoleUI.scanner.nextInt();
+        ConsoleUI.scanner.nextLine();
 
         User user = new User(name, age, id);
         userService.addUser(user);
@@ -67,8 +65,8 @@ public class Main {
 
     private static void updateUser() {
         System.out.print("\nEnter the unique ID of the user to update : ");
-        int id = scanner.nextInt();
-        scanner.nextLine();
+        int id = ConsoleUI.scanner.nextInt();
+        ConsoleUI.scanner.nextLine();
         User user = userService.getUser(id);
 
         if (user != null) {
@@ -80,27 +78,27 @@ public class Main {
 
     private static void deleteUser() {
         System.out.print("Enter the unique ID of the user to delete : ");
-        int id = scanner.nextInt();
-        scanner.nextLine();
+        int id = ConsoleUI.scanner.nextInt();
+        ConsoleUI.scanner.nextLine();
         if (userService.getUser(id) != null) {
             System.out.print("Are you sur you want to delete this user (Y/N) : ");
-            String conf = scanner.nextLine();
+            String conf = ConsoleUI.scanner.nextLine();
             if (conf.equalsIgnoreCase("y")) {
                 boolean isDeleted = userService.deleteUser(id);
                 if (isDeleted) ConsoleUI.displaySuccessMessage("User deleted successfully.");
                 else ConsoleUI.displayErrorMessage("Server Error!");
-            }else{
+            } else {
                 ConsoleUI.displaySuccessMessage("Operation has been canceled successfully.");
             }
-        }else {
+        } else {
             ConsoleUI.displayWarningMessage("User not found!");
         }
     }
 
     private static void viewUser() {
         System.out.print("\nEnter the unique ID of the user to view : ");
-        int id = scanner.nextInt();
-        scanner.nextLine();
+        int id = ConsoleUI.scanner.nextInt();
+        ConsoleUI.scanner.nextLine();
         User user = userService.getUser(id);
 
         if (user != null) {
@@ -110,48 +108,44 @@ public class Main {
         }
     }
 
-    private static void addCarbonConsumption(){
+    //
+    public static void addCarbonConsumption() {
         System.out.print("\nEnter the user id : ");
-        int userID = scanner.nextInt();
-        scanner.nextLine();
+        int userID = ConsoleUI.scanner.nextInt();
+        ConsoleUI.scanner.nextLine();
         User user = userService.getUser(userID);
-        if(user != null){
-            System.out.print("\tEnter the Quantity : ");
-            int quantity = scanner.nextInt();
-            scanner.nextLine();
 
-            System.out.print("\tEnter the Start Date (dd/mm/YYYY) : ");
-            LocalDate startDate = readLocalDate();
-
-            System.out.print("\tEnter the End Date (dd/mm/YYYY) : ");
-            LocalDate endDate = readLocalDate();
-
-            // Create the new Carbon Consumption
-            CarbonConsumption carbonConsumption = new CarbonConsumption(quantity, startDate, endDate);
-            user.addCarbonConsumption(carbonConsumption);
-            ConsoleUI.displaySuccessMessage("The Consumption has been added successfully.");
-        }else{
+        if (user != null) {
+            CarbonConsumptionService.addCarbonConsumption(user);
+        } else {
             ConsoleUI.displayErrorMessage("User not found!");
         }
     }
 
-    // Read Local Date
-    private static LocalDate readLocalDate() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate date = null;
-        boolean valid = false;
-
-        while (!valid) {
-            String input = scanner.nextLine();
-
-            try {
-                date = LocalDate.parse(input, formatter);
-                valid = true;
-            } catch (DateTimeParseException e) {
-                ConsoleUI.displayWarningMessage("Invalid date format. Please try again.");
+    // Generate Carbon Consumption Report
+    public static void generateCarbonReport() {
+        System.out.print("Enter the user id : ");
+        int userID = ConsoleUI.scanner.nextInt();
+        ConsoleUI.scanner.nextLine();
+        User user = userService.getUser(userID);
+        if (user != null) {
+            ConsoleUI.displayReportMenu();
+            String reportChoice = ConsoleUI.scanner.nextLine();
+            switch (reportChoice) {
+                case "1":
+                    CarbonConsumptionService.generateDailyReport(user);
+                    break;
+                case "2":
+                    CarbonConsumptionService.generateMonthlyReport(user);
+                    break;
+                case "3":
+                    CarbonConsumptionService.generateYearlyReport(user);
+                    break;
+                default:
+                    ConsoleUI.displayWarningMessage("Invalid choice. Please try again.");
             }
+        } else {
+            ConsoleUI.displayErrorMessage("User not found!");
         }
-
-        return date;
     }
 }
