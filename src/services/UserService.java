@@ -1,13 +1,23 @@
 package services;
 
+import models.CarbonConsumption;
 import models.User;
 import utils.ConsoleUI;
 
+import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class UserService {
     // A HashMap to store users with their uniqueID as the key
-    private final HashMap<Integer, User> users = new HashMap<>();
+    protected HashMap<Integer, User> users;
+    private static final Scanner scanner = new Scanner(System.in);
+
+    // Construct
+    public UserService() {
+        this.users = new HashMap<>();
+        seeder();
+    }
 
     // Method to add a new user
     public void addUser(User user) {
@@ -25,14 +35,22 @@ public class UserService {
     }
 
     // Method to update an existing user
-    public void updateUser(User updatedUser) {
-        int id = updatedUser.getId();
-        if (users.containsKey(id)) {
-            users.put(id, updatedUser);
-            ConsoleUI.displaySuccessMessage("User updated successfully.");
-        } else {
-            ConsoleUI.displayWarningMessage("User not found.");
+    public void updateUser(User user) {
+
+        System.out.print("Enter new name (leave blank to keep current) : ");
+        String name = scanner.nextLine();
+        if (!name.isEmpty()) {
+            user.setName(name);
         }
+
+        System.out.print("Enter new age (leave blank to keep current) : ");
+        String ageInput = scanner.nextLine();
+        if (!ageInput.isEmpty()) {
+            int age = Integer.parseInt(ageInput);
+            user.setAge(age);
+        }
+
+        ConsoleUI.displaySuccessMessage("User updated successfully!");
     }
 
     // Method to delete a user by their unique ID
@@ -44,14 +62,47 @@ public class UserService {
         return false;
     }
 
+    // Show single user
+    public void showUser(User user) {
+        System.out.print(user);
+    }
+
     // List all users
     public void listAllUsers() {
         if (users.isEmpty()) {
             ConsoleUI.displayWarningMessage("No users available.");
         } else {
             for (User user : users.values()) {
-                System.out.println(user);
+                showUser(user);
             }
         }
+    }
+
+    // Seeder method to populate the users HashMap with initial data
+    private void seeder() {
+        User user1 = new User("Alice", 30, 1);
+        user1.addCarbonConsumption(new CarbonConsumption(100, LocalDate.of(2024, 1, 1), LocalDate.of(2024, 1, 5)));
+        user1.addCarbonConsumption(new CarbonConsumption(150, LocalDate.of(2024, 1, 10), LocalDate.of(2024, 1, 15)));
+        users.put(1, user1);
+
+        User user2 = new User("Bob", 25, 2);
+        user2.addCarbonConsumption(new CarbonConsumption(200, LocalDate.of(2024, 2, 1), LocalDate.of(2024, 2, 5)));
+        user2.addCarbonConsumption(new CarbonConsumption(50, LocalDate.of(2024, 2, 10), LocalDate.of(2024, 2, 12)));
+        users.put(2, user2);
+
+        User user3 = new User("Charlie", 35, 3);
+        user3.addCarbonConsumption(new CarbonConsumption(80, LocalDate.of(2024, 3, 1), LocalDate.of(2024, 3, 3)));
+        user3.addCarbonConsumption(new CarbonConsumption(120, LocalDate.of(2024, 3, 5), LocalDate.of(2024, 3, 7)));
+        users.put(3, user3);
+
+        User user4 = new User("David", 28, 4);
+        user4.addCarbonConsumption(new CarbonConsumption(140, LocalDate.of(2024, 4, 1), LocalDate.of(2024, 4, 5)));
+        user4.addCarbonConsumption(new CarbonConsumption(90, LocalDate.of(2024, 4, 10), LocalDate.of(2024, 4, 12)));
+        users.put(4, user4);
+
+        User user5 = new User("Eve", 40, 5);
+        user5.addCarbonConsumption(new CarbonConsumption(200, LocalDate.of(2024, 5, 1), LocalDate.of(2024, 5, 5)));
+        user5.addCarbonConsumption(new CarbonConsumption(300, LocalDate.of(2024, 5, 6), LocalDate.of(2024, 5, 10)));
+        users.put(5, user5);
     }
 }

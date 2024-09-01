@@ -9,17 +9,18 @@ public class ConsoleUI {
     public static final String BLUE = "\u001B[34m";
 
     public static void displayMenu() {
-        System.out.print( "\n |=================================|" +
-                          "\n |  Carbon Footprint Management    |" +
-                          "\n |=================================|" +
-                          "\n | 1. Create User                  |" +
-                          "\n | 2. Update User                  |" +
-                          "\n | 3. Delete User                  |" +
-                          "\n | 4. View Single User             |" +
-                          "\n | 5. View All users               |" +
-                          "\n |"+ BLUE  + " 6. Exit" + RESET + "                         |"  +
-                          "\n |---------------------------------|" +
-                          "\n  Enter your choice : ");
+        System.out.print("\n |=================================|" +
+                "\n |  Carbon Consumption Management  |" +
+                "\n |=================================|" +
+                "\n | 1. Create User                  |" +
+                "\n | 2. Update User                  |" +
+                "\n | 3. Delete User                  |" +
+                "\n | 4. View Single User             |" +
+                "\n | 5. View All users               |" +
+                "\n | 6. Add Carbon Consumption       |" +
+                "\n |" + BLUE + " 7. Exit" + RESET + "                         |" +
+                "\n |---------------------------------|" +
+                "\n  Enter your choice : ");
     }
 
     public static void displayErrorMessage(String message) {
@@ -30,7 +31,7 @@ public class ConsoleUI {
         System.out.println(GREEN + "\nSuccess: " + message + RESET);
     }
 
-    public static void displayWarningMessage(String message){
+    public static void displayWarningMessage(String message) {
         System.out.println(YELLOW + "\nWarning: " + message + RESET);
     }
 }

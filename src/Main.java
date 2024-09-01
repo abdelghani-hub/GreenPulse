@@ -1,7 +1,11 @@
+import models.CarbonConsumption;
 import models.User;
 import services.UserService;
 import utils.ConsoleUI;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class Main {
@@ -16,31 +20,33 @@ public class Main {
 
         while (running) {
             ConsoleUI.displayMenu();
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            String choice = scanner.nextLine();
 
             switch (choice) {
-                case 1:
+                case "1":
                     createUser();
                     break;
-                case 2:
+                case "2":
                     updateUser();
                     break;
-                case 3:
+                case "3":
                     deleteUser();
                     break;
-                case 4:
+                case "4":
                     viewUser();
                     break;
-                case 5:
-                    viewAllUsers();
+                case "5":
+                    userService.listAllUsers();
                     break;
-                case 6:
+                case "6":
+                    addCarbonConsumption();
+                    break;
+                case "7":
                     running = false;
                     System.out.println("Exiting the application...");
                     break;
                 default:
-                    System.out.println("Invalid choice. Please try again.");
+                    ConsoleUI.displayErrorMessage("Invalid choice. Please try again.");
             }
         }
     }
@@ -66,20 +72,7 @@ public class Main {
         User user = userService.getUser(id);
 
         if (user != null) {
-            System.out.print("Enter new name (leave blank to keep current) : ");
-            String name = scanner.nextLine();
-            if (!name.isEmpty()) {
-                user.setName(name);
-            }
-
-            System.out.print("Enter new age (leave blank to keep current) : ");
-            String ageInput = scanner.nextLine();
-            if (!ageInput.isEmpty()) {
-                int age = Integer.parseInt(ageInput);
-                user.setAge(age);
-            }
-
-            ConsoleUI.displaySuccessMessage("User updated successfully!");
+            userService.updateUser(user);
         } else {
             ConsoleUI.displayWarningMessage("User not found.");
         }
@@ -107,16 +100,58 @@ public class Main {
     private static void viewUser() {
         System.out.print("\nEnter the unique ID of the user to view : ");
         int id = scanner.nextInt();
+        scanner.nextLine();
         User user = userService.getUser(id);
 
         if (user != null) {
-            System.out.println(user);
+            userService.showUser(user);
         } else {
             ConsoleUI.displayWarningMessage("User not found!");
         }
     }
 
-    private static void viewAllUsers() {
-        userService.listAllUsers();
+    private static void addCarbonConsumption(){
+        System.out.print("\nEnter the user id : ");
+        int userID = scanner.nextInt();
+        scanner.nextLine();
+        User user = userService.getUser(userID);
+        if(user != null){
+            System.out.print("\tEnter the Quantity : ");
+            int quantity = scanner.nextInt();
+            scanner.nextLine();
+
+            System.out.print("\tEnter the Start Date (dd/mm/YYYY) : ");
+            LocalDate startDate = readLocalDate();
+
+            System.out.print("\tEnter the End Date (dd/mm/YYYY) : ");
+            LocalDate endDate = readLocalDate();
+
+            // Create the new Carbon Consumption
+            CarbonConsumption carbonConsumption = new CarbonConsumption(quantity, startDate, endDate);
+            user.addCarbonConsumption(carbonConsumption);
+            ConsoleUI.displaySuccessMessage("The Consumption has been added successfully.");
+        }else{
+            ConsoleUI.displayErrorMessage("User not found!");
+        }
+    }
+
+    // Read Local Date
+    private static LocalDate readLocalDate() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate date = null;
+        boolean valid = false;
+
+        while (!valid) {
+            String input = scanner.nextLine();
+
+            try {
+                date = LocalDate.parse(input, formatter);
+                valid = true;
+            } catch (DateTimeParseException e) {
+                ConsoleUI.displayWarningMessage("Invalid date format. Please try again.");
+            }
+        }
+
+        return date;
     }
 }
