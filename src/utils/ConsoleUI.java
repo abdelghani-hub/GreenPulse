@@ -1,5 +1,8 @@
 package utils;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class ConsoleUI {
@@ -19,8 +22,8 @@ public class ConsoleUI {
                 "\n | 1. Create User                  |" +
                 "\n | 2. Update User                  |" +
                 "\n | 3. Delete User                  |" +
-                "\n | 4. View Single User             |" +
-                "\n | 5. View All users               |" +
+                "\n | 4. Show User                    |" +
+                "\n | 5. Show All users               |" +
                 "\n | 6. Add Carbon Consumption       |" +
                 "\n | 7. Generate Carbon report       |" +
                 "\n |" + BLUE + " 8. Exit" + RESET + "                         |" +
@@ -33,8 +36,8 @@ public class ConsoleUI {
         System.out.print(
                 "\n\t |----------------------|" +
                 "\n\t | 1. Daily Report      |" +
-                "\n\t | 2. Monthly Report    |" +
-                "\n\t | 3. Yearly Report     |" +
+                "\n\t | 2. Weekly Report     |" +
+                "\n\t | 3. Monthly Report    |" +
                 "\n\t |----------------------|" +
                 "\n\t\tEnter report choice : "
         );
@@ -50,5 +53,23 @@ public class ConsoleUI {
 
     public static void displayWarningMessage(String message) {
         System.out.println(YELLOW + "\nWarning: " + message + RESET);
+    }
+
+    // Read Local Date
+    public static LocalDate readLocalDate() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate date = null;
+        boolean valid = false;
+
+        while (!valid) {
+            String input = ConsoleUI.scanner.nextLine();
+            try {
+                date = LocalDate.parse(input, formatter);
+                valid = true;
+            } catch (DateTimeParseException e) {
+                ConsoleUI.displayWarningMessage("Invalid format. Please try again ( dd/mm/YYYY ) : ");
+            }
+        }
+        return date;
     }
 }

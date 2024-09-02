@@ -108,7 +108,7 @@ public class Main {
         }
     }
 
-    //
+    // Add Carbon Consumption
     public static void addCarbonConsumption() {
         System.out.print("\nEnter the user id : ");
         int userID = ConsoleUI.scanner.nextInt();
@@ -136,10 +136,10 @@ public class Main {
                     CarbonConsumptionService.generateDailyReport(user);
                     break;
                 case "2":
-                    CarbonConsumptionService.generateMonthlyReport(user);
+                    CarbonConsumptionService.generateWeeklyReport(user);
                     break;
                 case "3":
-                    CarbonConsumptionService.generateYearlyReport(user);
+                    CarbonConsumptionService.generateMonthlyReport(user);
                     break;
                 default:
                     ConsoleUI.displayWarningMessage("Invalid choice. Please try again.");
