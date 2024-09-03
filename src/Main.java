@@ -3,7 +3,6 @@ import services.CarbonConsumptionService;
 import services.UserService;
 import utils.ConsoleUI;
 
-
 public class Main {
     private static final UserService userService = new UserService();
 

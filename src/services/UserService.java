@@ -36,7 +36,6 @@ public class UserService {
 
     // Method to update an existing user
     public void updateUser(User user) {
-
         System.out.print("Enter new name (leave blank to keep current) : ");
         String name = scanner.nextLine();
         if (!name.isEmpty()) {
@@ -78,7 +77,7 @@ public class UserService {
         }
     }
 
-    // Seeder method to populate the users HashMap with initial data
+    // Seeder
     private void seeder() {
         User user1 = new User("Alice", 30, 1);
         user1.addCarbonConsumption(new CarbonConsumption(100, LocalDate.of(2024, 1, 1), LocalDate.of(2024, 1, 5)));

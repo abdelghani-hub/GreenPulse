@@ -6,7 +6,6 @@ import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class ConsoleUI {
-
     public static final String RESET = "\u001B[0m";
     public static final String YELLOW = "\u001B[33m";
     public static final String RED = "\u001B[31m";
@@ -62,7 +61,7 @@ public class ConsoleUI {
         boolean valid = false;
 
         while (!valid) {
-            String input = ConsoleUI.scanner.nextLine();
+            String input = scanner.nextLine();
             try {
                 date = LocalDate.parse(input, formatter);
                 valid = true;
