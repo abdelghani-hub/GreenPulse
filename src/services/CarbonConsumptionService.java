@@ -15,9 +15,7 @@ public class CarbonConsumptionService {
     public static void addCarbonConsumption(User user) {
         CarbonConsumption carbonConsumption = new CarbonConsumption();
 
-        System.out.print("\tEnter the Quantity : ");
-        int quantity = ConsoleUI.scanner.nextInt();
-        ConsoleUI.scanner.nextLine();
+        int quantity = ConsoleUI.readInt("\tEnter the Quantity : ");
         carbonConsumption.setQuantity(quantity);
 
         while (true) {
@@ -27,14 +25,12 @@ public class CarbonConsumptionService {
             System.out.print("\tEnter the End Date (dd/mm/YYYY) : ");
             carbonConsumption.setEndDate(ConsoleUI.readLocalDate());
 
-            if (carbonConsumption.getEndDate().isBefore(carbonConsumption.getStartDate())) {
+            if (carbonConsumption.getEndDate().isBefore(carbonConsumption.getStartDate()))
                 ConsoleUI.displayErrorMessage("Invalid Period! The end date should be after the start date!.");
-                continue;
-            } else if (isValidPeriod(carbonConsumption, user)) {
+            else if (!isValidPeriod(carbonConsumption, user))
+                ConsoleUI.displayErrorMessage("Date range overlaps with an existing period!");
+            else
                 break;
-            }
-
-            ConsoleUI.displayErrorMessage("Date range overlaps with an existing period!");
         }
 
         user.addCarbonConsumption(carbonConsumption);
@@ -45,7 +41,7 @@ public class CarbonConsumptionService {
         ArrayList<CarbonConsumption> cc = user.getCarbonConsumption();
         cc.sort(Comparator.comparing(CarbonConsumption::getStartDate)); // Sort by start date
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM yyyy");
-        System.out.println(ConsoleUI.YELLOW + "\n #" + user.getId() + ConsoleUI.RESET + " " + user.getName() + ", " + user.getAge() + " yo");
+        user.printLine();
 
         for (CarbonConsumption item : cc) {
             TreeMap<LocalDate, Double> dailyConsumptionMap = item.getDailyConsumptionMap();
@@ -62,7 +58,7 @@ public class CarbonConsumptionService {
         DateTimeFormatter formFormatter = DateTimeFormatter.ofPattern("d MMM");
         DateTimeFormatter toFormatter = DateTimeFormatter.ofPattern("d MMM yyyy");
 
-        System.out.println(ConsoleUI.YELLOW + "\n #" + user.getId() + ConsoleUI.RESET + " " + user.getName() + ", " + user.getAge() + " yo");
+        user.printLine();
 
         TreeMap<LocalDate, Double> weeklyConsumptionMap = new TreeMap<>();
         for (CarbonConsumption item : cc) {
@@ -91,9 +87,9 @@ public class CarbonConsumptionService {
         cc.sort(Comparator.comparing(CarbonConsumption::getStartDate));
         DateTimeFormatter formFormatter = DateTimeFormatter.ofPattern("MMMM yyyy");
 
-        System.out.println(ConsoleUI.YELLOW + "\n #" + user.getId() + ConsoleUI.RESET + " " + user.getName() + ", " + user.getAge() + " yo");
-        TreeMap<LocalDate, Double> monthlyConsumptionMap = new TreeMap<>();
+        user.printLine();
 
+        TreeMap<LocalDate, Double> monthlyConsumptionMap = new TreeMap<>();
         for (CarbonConsumption item : cc) {
             TreeMap<LocalDate, Double> dailyConsumptionMap = item.getDailyConsumptionMap();
 

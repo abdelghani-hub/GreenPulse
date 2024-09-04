@@ -22,7 +22,7 @@ public class UserService {
     // Method to add a new user
     public void addUser(User user) {
         if (users.containsKey(user.getId())) {
-            ConsoleUI.displayWarningMessage("ID already exists, Try an other one.");
+            ConsoleUI.displayErrorMessage("ID already exists, Try an other one.");
         } else {
             users.put(user.getId(), user);
             ConsoleUI.displaySuccessMessage("User added successfully.");
@@ -69,7 +69,7 @@ public class UserService {
     // List all users
     public void listAllUsers() {
         if (users.isEmpty()) {
-            ConsoleUI.displayWarningMessage("No users available.");
+            ConsoleUI.displayErrorMessage("No users available.");
         } else {
             for (User user : users.values()) {
                 showUser(user);
@@ -79,29 +79,29 @@ public class UserService {
 
     // Seeder
     private void seeder() {
-        User user1 = new User("Alice", 30, 1);
+        User user1 = new User("Alice", 30);
         user1.addCarbonConsumption(new CarbonConsumption(100, LocalDate.of(2024, 1, 1), LocalDate.of(2024, 1, 5)));
         user1.addCarbonConsumption(new CarbonConsumption(150, LocalDate.of(2024, 1, 10), LocalDate.of(2024, 1, 15)));
-        users.put(1, user1);
+        users.put(user1.getId(), user1);
 
-        User user2 = new User("Bob", 25, 2);
+        User user2 = new User("Bob", 25);
         user2.addCarbonConsumption(new CarbonConsumption(200, LocalDate.of(2024, 2, 1), LocalDate.of(2024, 2, 5)));
         user2.addCarbonConsumption(new CarbonConsumption(50, LocalDate.of(2024, 2, 10), LocalDate.of(2024, 2, 12)));
-        users.put(2, user2);
+        users.put(user2.getId(), user2);
 
-        User user3 = new User("Charlie", 35, 3);
+        User user3 = new User("Charlie", 35);
         user3.addCarbonConsumption(new CarbonConsumption(80, LocalDate.of(2024, 3, 1), LocalDate.of(2024, 3, 3)));
         user3.addCarbonConsumption(new CarbonConsumption(120, LocalDate.of(2024, 3, 5), LocalDate.of(2024, 3, 7)));
-        users.put(3, user3);
+        users.put(user3.getId(), user3);
 
-        User user4 = new User("David", 28, 4);
+        User user4 = new User("David", 28);
         user4.addCarbonConsumption(new CarbonConsumption(140, LocalDate.of(2024, 4, 1), LocalDate.of(2024, 4, 5)));
         user4.addCarbonConsumption(new CarbonConsumption(90, LocalDate.of(2024, 4, 10), LocalDate.of(2024, 4, 12)));
-        users.put(4, user4);
+        users.put(user4.getId(), user4);
 
-        User user5 = new User("Eve", 40, 5);
+        User user5 = new User("Eve", 40);
         user5.addCarbonConsumption(new CarbonConsumption(200, LocalDate.of(2024, 5, 1), LocalDate.of(2024, 5, 5)));
         user5.addCarbonConsumption(new CarbonConsumption(300, LocalDate.of(2024, 5, 6), LocalDate.of(2024, 5, 10)));
-        users.put(5, user5);
+        users.put(user5.getId(), user5);
     }
 }

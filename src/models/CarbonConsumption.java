@@ -12,11 +12,13 @@ public class CarbonConsumption {
     private LocalDate endDate;
     private static final AtomicInteger idCounter = new AtomicInteger();
 
-    private static int generateUniqueID() {
+    private int generateUniqueID() {
         return idCounter.incrementAndGet();
     }
 
-    public CarbonConsumption() {}
+    public CarbonConsumption() {
+        this.id = generateUniqueID();
+    }
     public CarbonConsumption(int quantity, LocalDate startDate, LocalDate endDate) {
         this.id = generateUniqueID();
         this.quantity = quantity;

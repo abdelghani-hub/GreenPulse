@@ -51,36 +51,28 @@ public class Main {
     private static void createUser() {
         System.out.print("\nEnter name : ");
         String name = ConsoleUI.scanner.nextLine();
-        System.out.print("Enter age  : ");
-        int age = ConsoleUI.scanner.nextInt();
-        ConsoleUI.scanner.nextLine();
-        System.out.print("Enter id   : ");
-        int id = ConsoleUI.scanner.nextInt();
-        ConsoleUI.scanner.nextLine();
 
-        User user = new User(name, age, id);
+        int age = ConsoleUI.readInt("Enter age  : ");
+
+        User user = new User(name, age);
         userService.addUser(user);
     }
 
     private static void updateUser() {
-        System.out.print("\nEnter the unique ID of the user to update : ");
-        int id = ConsoleUI.scanner.nextInt();
-        ConsoleUI.scanner.nextLine();
+        int id = ConsoleUI.readInt("\nEnter user id : ");
         User user = userService.getUser(id);
 
         if (user != null) {
             userService.updateUser(user);
         } else {
-            ConsoleUI.displayWarningMessage("User not found.");
+            ConsoleUI.displayErrorMessage("User not found.");
         }
     }
 
     private static void deleteUser() {
-        System.out.print("Enter the unique ID of the user to delete : ");
-        int id = ConsoleUI.scanner.nextInt();
-        ConsoleUI.scanner.nextLine();
+        int id = ConsoleUI.readInt("Enter user id : ");
         if (userService.getUser(id) != null) {
-            System.out.print("Are you sur you want to delete this user (Y/N) : ");
+            ConsoleUI.displayWarningMessage("Are you sur you want to delete this user (Y/N) : ");
             String conf = ConsoleUI.scanner.nextLine();
             if (conf.equalsIgnoreCase("y")) {
                 boolean isDeleted = userService.deleteUser(id);
@@ -90,28 +82,24 @@ public class Main {
                 ConsoleUI.displaySuccessMessage("Operation has been canceled successfully.");
             }
         } else {
-            ConsoleUI.displayWarningMessage("User not found!");
+            ConsoleUI.displayErrorMessage("User not found!");
         }
     }
 
     private static void viewUser() {
-        System.out.print("\nEnter the unique ID of the user to view : ");
-        int id = ConsoleUI.scanner.nextInt();
-        ConsoleUI.scanner.nextLine();
+        int id = ConsoleUI.readInt("\nEnter user id : ");
         User user = userService.getUser(id);
 
         if (user != null) {
             userService.showUser(user);
         } else {
-            ConsoleUI.displayWarningMessage("User not found!");
+            ConsoleUI.displayErrorMessage("User not found!");
         }
     }
 
     // Add Carbon Consumption
     public static void addCarbonConsumption() {
-        System.out.print("\nEnter the user id : ");
-        int userID = ConsoleUI.scanner.nextInt();
-        ConsoleUI.scanner.nextLine();
+        int userID = ConsoleUI.readInt("\nEnter the user id : ");
         User user = userService.getUser(userID);
 
         if (user != null) {
@@ -123,9 +111,7 @@ public class Main {
 
     // Generate Carbon Consumption Report
     public static void generateCarbonReport() {
-        System.out.print("Enter the user id : ");
-        int userID = ConsoleUI.scanner.nextInt();
-        ConsoleUI.scanner.nextLine();
+        int userID = ConsoleUI.readInt("Enter the user id : ");
         User user = userService.getUser(userID);
         if (user != null) {
             ConsoleUI.displayReportMenu();
@@ -141,7 +127,7 @@ public class Main {
                     CarbonConsumptionService.generateMonthlyReport(user);
                     break;
                 default:
-                    ConsoleUI.displayWarningMessage("Invalid choice. Please try again.");
+                    ConsoleUI.displayErrorMessage("Invalid choice. Please try again.");
             }
         } else {
             ConsoleUI.displayErrorMessage("User not found!");

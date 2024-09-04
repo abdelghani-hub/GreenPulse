@@ -3,20 +3,29 @@ package models;
 import utils.ConsoleUI;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class User {
     private String name;
     private int age;
+
     private final int id;
+    private static final AtomicInteger idCounter = new AtomicInteger();
+
 
     private final ArrayList<CarbonConsumption> carbonConsumption;
 
     // Constructor
-    public User(String name, int age, int id) {
+    public User(String name, int age) {
         this.name = name;
         this.age = age;
-        this.id = id;
+        this.id = generateUniqueID();
         this.carbonConsumption = new ArrayList<>();
+    }
+
+    // Id Generator
+    private static int generateUniqueID() {
+        return idCounter.incrementAndGet();
     }
 
     // Getters and Setters
@@ -57,7 +66,7 @@ public class User {
             carbonConsumptionSTR.append("\t#").append(c.getId())
                                 .append(": ").append(ConsoleUI.BLUE).append(c.getQuantity()).append(ConsoleUI.RESET)
                                 .append(" from ").append(c.getStartDate())
-                                .append("  to ").append(c.getEndDate())
+                                .append(" to ").append(c.getEndDate())
                                 .append("\n");
         }
         return "---------------------------------\n" +
@@ -66,6 +75,13 @@ public class User {
                 "age         : " + age + "\n" +
                 "Consumption : " + ConsoleUI.YELLOW + getConsumptionTotal() + ConsoleUI.RESET + "\n" +
                 carbonConsumptionSTR;
+    }
+
+    public void printLine(){
+        System.out.println(
+                ConsoleUI.YELLOW + "\n #" + id + ConsoleUI.RESET + " " + name + ", " + age + " yo : "
+                 + ConsoleUI.BLUE + getConsumptionTotal() + ConsoleUI.RESET
+        );
     }
 
     // Consumption Total
