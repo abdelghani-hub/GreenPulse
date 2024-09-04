@@ -6,7 +6,7 @@ import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class CarbonConsumption {
-    private int id;
+    private final int id;
     private int quantity;
     private LocalDate startDate;
     private LocalDate endDate;
